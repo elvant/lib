@@ -61,7 +61,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 52);
+/******/ 	return __webpack_require__(__webpack_require__.s = 55);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -74,6 +74,13 @@ module.exports = require("vue");
 /***/ }),
 
 /***/ 10:
+/***/ (function(module, exports) {
+
+module.exports = require("elvant/lib/utils/popup");
+
+/***/ }),
+
+/***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -1360,7 +1367,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
-/***/ 13:
+/***/ 14:
 /***/ (function(module, exports) {
 
 module.exports = require("elvant/lib/utils/util");
@@ -1569,7 +1576,7 @@ function setStyle(element, styleName, value) {
 
 /***/ }),
 
-/***/ 34:
+/***/ 37:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1582,7 +1589,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 exports.isVNode = isVNode;
 exports.getFirstComponentChild = getFirstComponentChild;
 
-var _util = __webpack_require__(13);
+var _util = __webpack_require__(14);
 
 function isVNode(node) {
   return node !== null && (typeof node === 'undefined' ? 'undefined' : _typeof(node)) === 'object' && (0, _util.hasOwn)(node, 'componentOptions');
@@ -1725,7 +1732,7 @@ var coerceTruthyValueToArray = exports.coerceTruthyValueToArray = function coerc
 
 /***/ }),
 
-/***/ 52:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1733,7 +1740,7 @@ var coerceTruthyValueToArray = exports.coerceTruthyValueToArray = function coerc
 
 exports.__esModule = true;
 
-var _main = __webpack_require__(53);
+var _main = __webpack_require__(56);
 
 var _main2 = _interopRequireDefault(_main);
 
@@ -1748,7 +1755,7 @@ exports.default = _main2.default;
 
 /***/ }),
 
-/***/ 53:
+/***/ 56:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1756,7 +1763,7 @@ exports.default = _main2.default;
 
 exports.__esModule = true;
 
-var _vuePopper = __webpack_require__(8);
+var _vuePopper = __webpack_require__(9);
 
 var _vuePopper2 = _interopRequireDefault(_vuePopper);
 
@@ -1766,7 +1773,7 @@ var _debounce2 = _interopRequireDefault(_debounce);
 
 var _dom = __webpack_require__(3);
 
-var _vdom = __webpack_require__(34);
+var _vdom = __webpack_require__(37);
 
 var _util = __webpack_require__(4);
 
@@ -2011,7 +2018,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2023,11 +2030,11 @@ var _vue = __webpack_require__(1);
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _popup = __webpack_require__(9);
+var _popup = __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var PopperJS = _vue2.default.prototype.$isServer ? function () {} : __webpack_require__(10);
+var PopperJS = _vue2.default.prototype.$isServer ? function () {} : __webpack_require__(11);
 var stop = function stop(e) {
   return e.stopPropagation();
 };
@@ -2219,13 +2226,6 @@ exports.default = {
     this.$options.beforeDestroy[0].call(this);
   }
 };
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports) {
-
-module.exports = require("elvant/lib/utils/popup");
 
 /***/ })
 

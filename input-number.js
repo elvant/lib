@@ -61,7 +61,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 86);
+/******/ 	return __webpack_require__(__webpack_require__.s = 90);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -176,7 +176,7 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ 11:
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -184,7 +184,7 @@ module.exports = function normalizeComponent (
 
 exports.__esModule = true;
 
-var _input = __webpack_require__(16);
+var _input = __webpack_require__(17);
 
 var _input2 = _interopRequireDefault(_input);
 
@@ -199,7 +199,7 @@ exports.default = _input2.default;
 
 /***/ }),
 
-/***/ 12:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -218,21 +218,23 @@ function isKorean(text) {
 
 /***/ }),
 
-/***/ 16:
+/***/ 17:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_vue__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_vue__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5ce34479_hasScoped_false_preserveWhitespace_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_input_vue__ = __webpack_require__(19);
+/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8a5757a8_hasScoped_false_preserveWhitespace_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_input_vue__ = __webpack_require__(19);
 var normalizeComponent = __webpack_require__(0)
 /* script */
+
 
 /* template */
 
 /* template functional */
-  var __vue_template_functional__ = false
+var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -241,7 +243,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_vue___default.a,
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5ce34479_hasScoped_false_preserveWhitespace_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_input_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8a5757a8_hasScoped_false_preserveWhitespace_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_input_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -253,7 +255,593 @@ var Component = normalizeComponent(
 
 /***/ }),
 
-/***/ 17:
+/***/ 18:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.default = calcTextareaHeight;
+var hiddenTextarea = void 0;
+
+var HIDDEN_STYLE = '\n  height:0 !important;\n  visibility:hidden !important;\n  overflow:hidden !important;\n  position:absolute !important;\n  z-index:-1000 !important;\n  top:0 !important;\n  right:0 !important\n';
+
+var CONTEXT_STYLE = ['letter-spacing', 'line-height', 'padding-top', 'padding-bottom', 'font-family', 'font-weight', 'font-size', 'text-rendering', 'text-transform', 'width', 'text-indent', 'padding-left', 'padding-right', 'border-width', 'box-sizing'];
+
+function calculateNodeStyling(targetElement) {
+  var style = window.getComputedStyle(targetElement);
+
+  var boxSizing = style.getPropertyValue('box-sizing');
+
+  var paddingSize = parseFloat(style.getPropertyValue('padding-bottom')) + parseFloat(style.getPropertyValue('padding-top'));
+
+  var borderSize = parseFloat(style.getPropertyValue('border-bottom-width')) + parseFloat(style.getPropertyValue('border-top-width'));
+
+  var contextStyle = CONTEXT_STYLE.map(function (name) {
+    return name + ':' + style.getPropertyValue(name);
+  }).join(';');
+
+  return { contextStyle: contextStyle, paddingSize: paddingSize, borderSize: borderSize, boxSizing: boxSizing };
+}
+
+function calcTextareaHeight(targetElement) {
+  var minRows = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  var maxRows = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+  if (!hiddenTextarea) {
+    hiddenTextarea = document.createElement('textarea');
+    document.body.appendChild(hiddenTextarea);
+  }
+
+  var _calculateNodeStyling = calculateNodeStyling(targetElement),
+      paddingSize = _calculateNodeStyling.paddingSize,
+      borderSize = _calculateNodeStyling.borderSize,
+      boxSizing = _calculateNodeStyling.boxSizing,
+      contextStyle = _calculateNodeStyling.contextStyle;
+
+  hiddenTextarea.setAttribute('style', contextStyle + ';' + HIDDEN_STYLE);
+  hiddenTextarea.value = targetElement.value || targetElement.placeholder || '';
+
+  var height = hiddenTextarea.scrollHeight;
+  var result = {};
+
+  if (boxSizing === 'border-box') {
+    height = height + borderSize;
+  } else if (boxSizing === 'content-box') {
+    height = height - paddingSize;
+  }
+
+  hiddenTextarea.value = '';
+  var singleRowHeight = hiddenTextarea.scrollHeight - paddingSize;
+
+  if (minRows !== null) {
+    var minHeight = singleRowHeight * minRows;
+    if (boxSizing === 'border-box') {
+      minHeight = minHeight + paddingSize + borderSize;
+    }
+    height = Math.max(minHeight, height);
+    result.minHeight = minHeight + 'px';
+  }
+  if (maxRows !== null) {
+    var maxHeight = singleRowHeight * maxRows;
+    if (boxSizing === 'border-box') {
+      maxHeight = maxHeight + paddingSize + borderSize;
+    }
+    height = Math.min(maxHeight, height);
+  }
+  result.height = height + 'px';
+  hiddenTextarea.parentNode && hiddenTextarea.parentNode.removeChild(hiddenTextarea);
+  hiddenTextarea = null;
+  return result;
+};
+
+/***/ }),
+
+/***/ 19:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[
+  _vm.type === 'textarea' ? 'el-textarea' : 'el-input',
+  _vm.inputSize ? 'el-input--' + _vm.inputSize : '',
+  {
+    'is-disabled': _vm.inputDisabled,
+    'el-input-group': _vm.$slots.prepend || _vm.$slots.append,
+    'el-input-group--append': _vm.$slots.append,
+    'el-input-group--prepend': _vm.$slots.prepend,
+    'el-input--prefix': _vm.$slots.prefix || _vm.prefixIcon,
+    'el-input--suffix': _vm.$slots.suffix || _vm.suffixIcon || _vm.clearable
+  }
+  ],on:{"mouseenter":function($event){_vm.hovering = true},"mouseleave":function($event){_vm.hovering = false}}},[(_vm.type !== 'textarea')?[(_vm.$slots.prepend)?_c('div',{staticClass:"el-input-group__prepend"},[_vm._t("prepend")],2):_vm._e(),(_vm.type !== 'textarea')?_c('input',_vm._b({ref:"input",staticClass:"el-input__inner",attrs:{"tabindex":_vm.tabindex,"type":_vm.type,"disabled":_vm.inputDisabled,"readonly":_vm.readonly,"autocomplete":_vm.autoComplete,"aria-label":_vm.label},domProps:{"value":_vm.currentValue},on:{"compositionstart":_vm.handleComposition,"compositionupdate":_vm.handleComposition,"compositionend":_vm.handleComposition,"input":_vm.handleInput,"focus":_vm.handleFocus,"blur":_vm.handleBlur,"change":_vm.handleChange}},'input',_vm.$attrs,false)):_vm._e(),(_vm.$slots.prefix || _vm.prefixIcon)?_c('span',{staticClass:"el-input__prefix"},[_vm._t("prefix"),(_vm.prefixIcon)?_c('i',{staticClass:"el-input__icon",class:_vm.prefixIcon}):_vm._e()],2):_vm._e(),(_vm.$slots.suffix || _vm.suffixIcon || _vm.showClear || _vm.validateState && _vm.needStatusIcon)?_c('span',{staticClass:"el-input__suffix"},[_c('span',{staticClass:"el-input__suffix-inner"},[(!_vm.showClear)?[_vm._t("suffix"),(_vm.suffixIcon)?_c('i',{staticClass:"el-input__icon",class:_vm.suffixIcon}):_vm._e()]:_c('i',{staticClass:"el-input__icon el-icon-circle-close el-input__clear",on:{"click":_vm.clear}})],2),(_vm.validateState)?_c('i',{staticClass:"el-input__icon",class:['el-input__validateIcon', _vm.validateIcon]}):_vm._e()]):_vm._e(),(_vm.$slots.append)?_c('div',{staticClass:"el-input-group__append"},[_vm._t("append")],2):_vm._e()]:_c('textarea',_vm._b({ref:"textarea",staticClass:"el-textarea__inner",style:(_vm.textareaStyle),attrs:{"tabindex":_vm.tabindex,"disabled":_vm.inputDisabled,"readonly":_vm.readonly,"aria-label":_vm.label},domProps:{"value":_vm.currentValue},on:{"compositionstart":_vm.handleComposition,"compositionupdate":_vm.handleComposition,"compositionend":_vm.handleComposition,"input":_vm.handleInput,"focus":_vm.handleFocus,"blur":_vm.handleBlur,"change":_vm.handleChange}},'textarea',_vm.$attrs,false))],2)}
+var staticRenderFns = []
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+function _broadcast(componentName, eventName, params) {
+  this.$children.forEach(function (child) {
+    var name = child.$options.componentName;
+
+    if (name === componentName) {
+      child.$emit.apply(child, [eventName].concat(params));
+    } else {
+      _broadcast.apply(child, [componentName, eventName].concat([params]));
+    }
+  });
+}
+exports.default = {
+  methods: {
+    dispatch: function dispatch(componentName, eventName, params) {
+      var parent = this.$parent || this.$root;
+      var name = parent.$options.componentName;
+
+      while (parent && (!name || name !== componentName)) {
+        parent = parent.$parent;
+
+        if (parent) {
+          name = parent.$options.componentName;
+        }
+      }
+      if (parent) {
+        parent.$emit.apply(parent, [eventName].concat(params));
+      }
+    },
+    broadcast: function broadcast(componentName, eventName, params) {
+      _broadcast.call(this, componentName, eventName, params);
+    }
+  }
+};
+
+/***/ }),
+
+/***/ 41:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+exports.default = function (ref) {
+  return {
+    methods: {
+      focus: function focus() {
+        this.$refs[ref].focus();
+      }
+    }
+  };
+};
+
+;
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+/**
+ * Show migrating guide in browser console.
+ *
+ * Usage:
+ * import Migrating from 'elvant/src/mixins/migrating';
+ *
+ * mixins: [Migrating]
+ *
+ * add getMigratingConfig method for your component.
+ *  getMigratingConfig() {
+ *    return {
+ *      props: {
+ *        'allow-no-selection': 'allow-no-selection is removed.',
+ *        'selection-mode': 'selection-mode is removed.'
+ *      },
+ *      events: {
+ *        selectionchange: 'selectionchange is renamed to selection-change.'
+ *      }
+ *    };
+ *  },
+ */
+exports.default = {
+  mounted: function mounted() {
+    if (true) return;
+    if (!this.$vnode) return;
+
+    var _getMigratingConfig = this.getMigratingConfig(),
+        _getMigratingConfig$p = _getMigratingConfig.props,
+        props = _getMigratingConfig$p === undefined ? {} : _getMigratingConfig$p,
+        _getMigratingConfig$e = _getMigratingConfig.events,
+        events = _getMigratingConfig$e === undefined ? {} : _getMigratingConfig$e;
+
+    var _$vnode = this.$vnode,
+        data = _$vnode.data,
+        componentOptions = _$vnode.componentOptions;
+
+    var definedProps = data.attrs || {};
+    var definedEvents = componentOptions.listeners || {};
+
+    for (var propName in definedProps) {
+      if (definedProps.hasOwnProperty(propName) && props[propName]) {
+        console.warn('[Element Migrating][' + this.$options.name + '][Attribute]: ' + props[propName]);
+      }
+    }
+
+    for (var eventName in definedEvents) {
+      if (definedEvents.hasOwnProperty(eventName) && events[eventName]) {
+        console.warn('[Element Migrating][' + this.$options.name + '][Event]: ' + events[eventName]);
+      }
+    }
+  },
+
+  methods: {
+    getMigratingConfig: function getMigratingConfig() {
+      return {
+        props: {},
+        events: {}
+      };
+    }
+  }
+};
+
+/***/ }),
+
+/***/ 57:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _dom = __webpack_require__(6);
+
+exports.default = {
+  bind: function bind(el, binding, vnode) {
+    var interval = null;
+    var startTime = void 0;
+    var handler = function handler() {
+      return vnode.context[binding.expression].apply();
+    };
+    var clear = function clear() {
+      if (new Date() - startTime < 100) {
+        handler();
+      }
+      clearInterval(interval);
+      interval = null;
+    };
+
+    (0, _dom.on)(el, 'mousedown', function (e) {
+      if (e.button !== 0) return;
+      startTime = new Date();
+      (0, _dom.once)(document, 'mouseup', clear);
+      clearInterval(interval);
+      interval = setInterval(handler, 100);
+    });
+  }
+};
+
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, exports) {
+
+module.exports = require("elvant/lib/utils/dom");
+
+/***/ }),
+
+/***/ 64:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _input = __webpack_require__(12);
+
+var _input2 = _interopRequireDefault(_input);
+
+var _focus = __webpack_require__(41);
+
+var _focus2 = _interopRequireDefault(_focus);
+
+var _repeatClick = __webpack_require__(57);
+
+var _repeatClick2 = _interopRequireDefault(_repeatClick);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  name: 'ElInputNumber',
+  mixins: [(0, _focus2.default)('input')],
+  inject: {
+    elForm: {
+      default: ''
+    },
+    elFormItem: {
+      default: ''
+    }
+  },
+  directives: {
+    repeatClick: _repeatClick2.default
+  },
+  components: {
+    ElInput: _input2.default
+  },
+  props: {
+    step: {
+      type: Number,
+      default: 1
+    },
+    max: {
+      type: Number,
+      default: Infinity
+    },
+    min: {
+      type: Number,
+      default: -Infinity
+    },
+    value: {},
+    disabled: Boolean,
+    size: String,
+    controls: {
+      type: Boolean,
+      default: true
+    },
+    controlsPosition: {
+      type: String,
+      default: ''
+    },
+    name: String,
+    label: String,
+    precision: {
+      type: Number,
+      validator: function validator(val) {
+        return val >= 0 && val === parseInt(val, 10);
+      }
+    }
+  },
+  data: function data() {
+    return {
+      currentValue: 0
+    };
+  },
+
+  watch: {
+    value: {
+      immediate: true,
+      handler: function handler(value) {
+        var newVal = value === undefined ? value : Number(value);
+        if (newVal !== undefined) {
+          if (isNaN(newVal)) {
+            return;
+          }
+          if (this.precision !== undefined) {
+            newVal = this.toPrecision(newVal, this.precision);
+          }
+        }
+        if (newVal >= this.max) newVal = this.max;
+        if (newVal <= this.min) newVal = this.min;
+        this.currentValue = newVal;
+        this.$emit('input', newVal);
+      }
+    }
+  },
+  computed: {
+    minDisabled: function minDisabled() {
+      return this._decrease(this.value, this.step) < this.min;
+    },
+    maxDisabled: function maxDisabled() {
+      return this._increase(this.value, this.step) > this.max;
+    },
+    numPrecision: function numPrecision() {
+      var value = this.value,
+          step = this.step,
+          getPrecision = this.getPrecision,
+          precision = this.precision;
+
+      var stepPrecision = getPrecision(step);
+      if (precision !== undefined) {
+        if (stepPrecision > precision) {
+          console.warn('[Element Warn][InputNumber]precision should not be less than the decimal places of step');
+        }
+        return precision;
+      } else {
+        return Math.max(getPrecision(value), stepPrecision);
+      }
+    },
+    controlsAtRight: function controlsAtRight() {
+      return this.controlsPosition === 'right';
+    },
+    _elFormItemSize: function _elFormItemSize() {
+      return (this.elFormItem || {}).elFormItemSize;
+    },
+    inputNumberSize: function inputNumberSize() {
+      return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
+    },
+    inputNumberDisabled: function inputNumberDisabled() {
+      return this.disabled || (this.elForm || {}).disabled;
+    },
+    currentInputValue: function currentInputValue() {
+      var currentValue = this.currentValue;
+      if (typeof currentValue === 'number' && this.precision !== undefined) {
+        return currentValue.toFixed(this.precision);
+      } else {
+        return currentValue;
+      }
+    }
+  },
+  methods: {
+    toPrecision: function toPrecision(num, precision) {
+      if (precision === undefined) precision = this.numPrecision;
+      return parseFloat(parseFloat(Number(num).toFixed(precision)));
+    },
+    getPrecision: function getPrecision(value) {
+      if (value === undefined) return 0;
+      var valueString = value.toString();
+      var dotPosition = valueString.indexOf('.');
+      var precision = 0;
+      if (dotPosition !== -1) {
+        precision = valueString.length - dotPosition - 1;
+      }
+      return precision;
+    },
+    _increase: function _increase(val, step) {
+      if (typeof val !== 'number' && val !== undefined) return this.currentValue;
+
+      var precisionFactor = Math.pow(10, this.numPrecision);
+      // Solve the accuracy problem of JS decimal calculation by converting the value to integer.
+      return this.toPrecision((precisionFactor * val + precisionFactor * step) / precisionFactor);
+    },
+    _decrease: function _decrease(val, step) {
+      if (typeof val !== 'number' && val !== undefined) return this.currentValue;
+
+      var precisionFactor = Math.pow(10, this.numPrecision);
+
+      return this.toPrecision((precisionFactor * val - precisionFactor * step) / precisionFactor);
+    },
+    increase: function increase() {
+      if (this.inputNumberDisabled || this.maxDisabled) return;
+      var value = this.value || 0;
+      var newVal = this._increase(value, this.step);
+      this.setCurrentValue(newVal);
+    },
+    decrease: function decrease() {
+      if (this.inputNumberDisabled || this.minDisabled) return;
+      var value = this.value || 0;
+      var newVal = this._decrease(value, this.step);
+      this.setCurrentValue(newVal);
+    },
+    handleBlur: function handleBlur(event) {
+      this.$emit('blur', event);
+      this.$refs.input.setCurrentValue(this.currentInputValue);
+    },
+    handleFocus: function handleFocus(event) {
+      this.$emit('focus', event);
+    },
+    setCurrentValue: function setCurrentValue(newVal) {
+      var oldVal = this.currentValue;
+      if (typeof newVal === 'number' && this.precision !== undefined) {
+        newVal = this.toPrecision(newVal, this.precision);
+      }
+      if (newVal >= this.max) newVal = this.max;
+      if (newVal <= this.min) newVal = this.min;
+      if (oldVal === newVal) {
+        this.$refs.input.setCurrentValue(this.currentInputValue);
+        return;
+      }
+      this.$emit('input', newVal);
+      this.$emit('change', newVal, oldVal);
+      this.currentValue = newVal;
+    },
+    handleInputChange: function handleInputChange(value) {
+      var newVal = value === '' ? undefined : Number(value);
+      if (!isNaN(newVal) || value === '') {
+        this.setCurrentValue(newVal);
+      }
+    }
+  },
+  mounted: function mounted() {
+    var innerInput = this.$refs.input.$refs.input;
+    innerInput.setAttribute('role', 'spinbutton');
+    innerInput.setAttribute('aria-valuemax', this.max);
+    innerInput.setAttribute('aria-valuemin', this.min);
+    innerInput.setAttribute('aria-valuenow', this.currentValue);
+    innerInput.setAttribute('aria-disabled', this.inputNumberDisabled);
+  },
+  updated: function updated() {
+    if (!this.$refs || !this.$refs.input) return;
+    var innerInput = this.$refs.input.$refs.input;
+    innerInput.setAttribute('aria-valuenow', this.currentValue);
+  }
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+
+/***/ 7:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+exports.default = function (target) {
+  for (var i = 1, j = arguments.length; i < j; i++) {
+    var source = arguments[i] || {};
+    for (var prop in source) {
+      if (source.hasOwnProperty(prop)) {
+        var value = source[prop];
+        if (value !== undefined) {
+          target[prop] = value;
+        }
+      }
+    }
+  }
+
+  return target;
+};
+
+;
+
+/***/ }),
+
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -277,7 +865,7 @@ var _merge = __webpack_require__(7);
 
 var _merge2 = _interopRequireDefault(_merge);
 
-var _shared = __webpack_require__(12);
+var _shared = __webpack_require__(13);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -610,155 +1198,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 18:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-exports.default = calcTextareaHeight;
-var hiddenTextarea = void 0;
-
-var HIDDEN_STYLE = '\n  height:0 !important;\n  visibility:hidden !important;\n  overflow:hidden !important;\n  position:absolute !important;\n  z-index:-1000 !important;\n  top:0 !important;\n  right:0 !important\n';
-
-var CONTEXT_STYLE = ['letter-spacing', 'line-height', 'padding-top', 'padding-bottom', 'font-family', 'font-weight', 'font-size', 'text-rendering', 'text-transform', 'width', 'text-indent', 'padding-left', 'padding-right', 'border-width', 'box-sizing'];
-
-function calculateNodeStyling(targetElement) {
-  var style = window.getComputedStyle(targetElement);
-
-  var boxSizing = style.getPropertyValue('box-sizing');
-
-  var paddingSize = parseFloat(style.getPropertyValue('padding-bottom')) + parseFloat(style.getPropertyValue('padding-top'));
-
-  var borderSize = parseFloat(style.getPropertyValue('border-bottom-width')) + parseFloat(style.getPropertyValue('border-top-width'));
-
-  var contextStyle = CONTEXT_STYLE.map(function (name) {
-    return name + ':' + style.getPropertyValue(name);
-  }).join(';');
-
-  return { contextStyle: contextStyle, paddingSize: paddingSize, borderSize: borderSize, boxSizing: boxSizing };
-}
-
-function calcTextareaHeight(targetElement) {
-  var minRows = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-  var maxRows = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
-  if (!hiddenTextarea) {
-    hiddenTextarea = document.createElement('textarea');
-    document.body.appendChild(hiddenTextarea);
-  }
-
-  var _calculateNodeStyling = calculateNodeStyling(targetElement),
-      paddingSize = _calculateNodeStyling.paddingSize,
-      borderSize = _calculateNodeStyling.borderSize,
-      boxSizing = _calculateNodeStyling.boxSizing,
-      contextStyle = _calculateNodeStyling.contextStyle;
-
-  hiddenTextarea.setAttribute('style', contextStyle + ';' + HIDDEN_STYLE);
-  hiddenTextarea.value = targetElement.value || targetElement.placeholder || '';
-
-  var height = hiddenTextarea.scrollHeight;
-  var result = {};
-
-  if (boxSizing === 'border-box') {
-    height = height + borderSize;
-  } else if (boxSizing === 'content-box') {
-    height = height - paddingSize;
-  }
-
-  hiddenTextarea.value = '';
-  var singleRowHeight = hiddenTextarea.scrollHeight - paddingSize;
-
-  if (minRows !== null) {
-    var minHeight = singleRowHeight * minRows;
-    if (boxSizing === 'border-box') {
-      minHeight = minHeight + paddingSize + borderSize;
-    }
-    height = Math.max(minHeight, height);
-    result.minHeight = minHeight + 'px';
-  }
-  if (maxRows !== null) {
-    var maxHeight = singleRowHeight * maxRows;
-    if (boxSizing === 'border-box') {
-      maxHeight = maxHeight + paddingSize + borderSize;
-    }
-    height = Math.min(maxHeight, height);
-  }
-  result.height = height + 'px';
-  hiddenTextarea.parentNode && hiddenTextarea.parentNode.removeChild(hiddenTextarea);
-  hiddenTextarea = null;
-  return result;
-};
-
-/***/ }),
-
-/***/ 19:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[
-  _vm.type === 'textarea' ? 'el-textarea' : 'el-input',
-  _vm.inputSize ? 'el-input--' + _vm.inputSize : '',
-  {
-    'is-disabled': _vm.inputDisabled,
-    'el-input-group': _vm.$slots.prepend || _vm.$slots.append,
-    'el-input-group--append': _vm.$slots.append,
-    'el-input-group--prepend': _vm.$slots.prepend,
-    'el-input--prefix': _vm.$slots.prefix || _vm.prefixIcon,
-    'el-input--suffix': _vm.$slots.suffix || _vm.suffixIcon || _vm.clearable
-  }
-  ],on:{"mouseenter":function($event){_vm.hovering = true},"mouseleave":function($event){_vm.hovering = false}}},[(_vm.type !== 'textarea')?[(_vm.$slots.prepend)?_c('div',{staticClass:"el-input-group__prepend"},[_vm._t("prepend")],2):_vm._e(),(_vm.type !== 'textarea')?_c('input',_vm._b({ref:"input",staticClass:"el-input__inner",attrs:{"tabindex":_vm.tabindex,"type":_vm.type,"disabled":_vm.inputDisabled,"readonly":_vm.readonly,"autocomplete":_vm.autoComplete,"aria-label":_vm.label},domProps:{"value":_vm.currentValue},on:{"compositionstart":_vm.handleComposition,"compositionupdate":_vm.handleComposition,"compositionend":_vm.handleComposition,"input":_vm.handleInput,"focus":_vm.handleFocus,"blur":_vm.handleBlur,"change":_vm.handleChange}},'input',_vm.$attrs,false)):_vm._e(),(_vm.$slots.prefix || _vm.prefixIcon)?_c('span',{staticClass:"el-input__prefix"},[_vm._t("prefix"),(_vm.prefixIcon)?_c('i',{staticClass:"el-input__icon",class:_vm.prefixIcon}):_vm._e()],2):_vm._e(),(_vm.$slots.suffix || _vm.suffixIcon || _vm.showClear || _vm.validateState && _vm.needStatusIcon)?_c('span',{staticClass:"el-input__suffix"},[_c('span',{staticClass:"el-input__suffix-inner"},[(!_vm.showClear)?[_vm._t("suffix"),(_vm.suffixIcon)?_c('i',{staticClass:"el-input__icon",class:_vm.suffixIcon}):_vm._e()]:_c('i',{staticClass:"el-input__icon el-icon-circle-close el-input__clear",on:{"click":_vm.clear}})],2),(_vm.validateState)?_c('i',{staticClass:"el-input__icon",class:['el-input__validateIcon', _vm.validateIcon]}):_vm._e()]):_vm._e(),(_vm.$slots.append)?_c('div',{staticClass:"el-input-group__append"},[_vm._t("append")],2):_vm._e()]:_c('textarea',_vm._b({ref:"textarea",staticClass:"el-textarea__inner",style:(_vm.textareaStyle),attrs:{"tabindex":_vm.tabindex,"disabled":_vm.inputDisabled,"readonly":_vm.readonly,"aria-label":_vm.label},domProps:{"value":_vm.currentValue},on:{"compositionstart":_vm.handleComposition,"compositionupdate":_vm.handleComposition,"compositionend":_vm.handleComposition,"input":_vm.handleInput,"focus":_vm.handleFocus,"blur":_vm.handleBlur,"change":_vm.handleChange}},'textarea',_vm.$attrs,false))],2)}
-var staticRenderFns = []
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ __webpack_exports__["a"] = (esExports);
-
-/***/ }),
-
-/***/ 2:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-function _broadcast(componentName, eventName, params) {
-  this.$children.forEach(function (child) {
-    var name = child.$options.componentName;
-
-    if (name === componentName) {
-      child.$emit.apply(child, [eventName].concat(params));
-    } else {
-      _broadcast.apply(child, [componentName, eventName].concat([params]));
-    }
-  });
-}
-exports.default = {
-  methods: {
-    dispatch: function dispatch(componentName, eventName, params) {
-      var parent = this.$parent || this.$root;
-      var name = parent.$options.componentName;
-
-      while (parent && (!name || name !== componentName)) {
-        parent = parent.$parent;
-
-        if (parent) {
-          name = parent.$options.componentName;
-        }
-      }
-      if (parent) {
-        parent.$emit.apply(parent, [eventName].concat(params));
-      }
-    },
-    broadcast: function broadcast(componentName, eventName, params) {
-      _broadcast.call(this, componentName, eventName, params);
-    }
-  }
-};
-
-/***/ }),
-
-/***/ 38:
+/***/ 90:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -766,172 +1206,7 @@ exports.default = {
 
 exports.__esModule = true;
 
-exports.default = function (ref) {
-  return {
-    methods: {
-      focus: function focus() {
-        this.$refs[ref].focus();
-      }
-    }
-  };
-};
-
-;
-
-/***/ }),
-
-/***/ 5:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-/**
- * Show migrating guide in browser console.
- *
- * Usage:
- * import Migrating from 'elvant/src/mixins/migrating';
- *
- * mixins: [Migrating]
- *
- * add getMigratingConfig method for your component.
- *  getMigratingConfig() {
- *    return {
- *      props: {
- *        'allow-no-selection': 'allow-no-selection is removed.',
- *        'selection-mode': 'selection-mode is removed.'
- *      },
- *      events: {
- *        selectionchange: 'selectionchange is renamed to selection-change.'
- *      }
- *    };
- *  },
- */
-exports.default = {
-  mounted: function mounted() {
-    if (true) return;
-    if (!this.$vnode) return;
-
-    var _getMigratingConfig = this.getMigratingConfig(),
-        _getMigratingConfig$p = _getMigratingConfig.props,
-        props = _getMigratingConfig$p === undefined ? {} : _getMigratingConfig$p,
-        _getMigratingConfig$e = _getMigratingConfig.events,
-        events = _getMigratingConfig$e === undefined ? {} : _getMigratingConfig$e;
-
-    var _$vnode = this.$vnode,
-        data = _$vnode.data,
-        componentOptions = _$vnode.componentOptions;
-
-    var definedProps = data.attrs || {};
-    var definedEvents = componentOptions.listeners || {};
-
-    for (var propName in definedProps) {
-      if (definedProps.hasOwnProperty(propName) && props[propName]) {
-        console.warn('[Element Migrating][' + this.$options.name + '][Attribute]: ' + props[propName]);
-      }
-    }
-
-    for (var eventName in definedEvents) {
-      if (definedEvents.hasOwnProperty(eventName) && events[eventName]) {
-        console.warn('[Element Migrating][' + this.$options.name + '][Event]: ' + events[eventName]);
-      }
-    }
-  },
-
-  methods: {
-    getMigratingConfig: function getMigratingConfig() {
-      return {
-        props: {},
-        events: {}
-      };
-    }
-  }
-};
-
-/***/ }),
-
-/***/ 54:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _dom = __webpack_require__(6);
-
-exports.default = {
-  bind: function bind(el, binding, vnode) {
-    var interval = null;
-    var startTime = void 0;
-    var handler = function handler() {
-      return vnode.context[binding.expression].apply();
-    };
-    var clear = function clear() {
-      if (new Date() - startTime < 100) {
-        handler();
-      }
-      clearInterval(interval);
-      interval = null;
-    };
-
-    (0, _dom.on)(el, 'mousedown', function (e) {
-      if (e.button !== 0) return;
-      startTime = new Date();
-      (0, _dom.once)(document, 'mouseup', clear);
-      clearInterval(interval);
-      interval = setInterval(handler, 100);
-    });
-  }
-};
-
-/***/ }),
-
-/***/ 6:
-/***/ (function(module, exports) {
-
-module.exports = require("elvant/lib/utils/dom");
-
-/***/ }),
-
-/***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-exports.default = function (target) {
-  for (var i = 1, j = arguments.length; i < j; i++) {
-    var source = arguments[i] || {};
-    for (var prop in source) {
-      if (source.hasOwnProperty(prop)) {
-        var value = source[prop];
-        if (value !== undefined) {
-          target[prop] = value;
-        }
-      }
-    }
-  }
-
-  return target;
-};
-
-;
-
-/***/ }),
-
-/***/ 86:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _inputNumber = __webpack_require__(87);
+var _inputNumber = __webpack_require__(91);
 
 var _inputNumber2 = _interopRequireDefault(_inputNumber);
 
@@ -946,21 +1221,23 @@ exports.default = _inputNumber2.default;
 
 /***/ }),
 
-/***/ 87:
+/***/ 91:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_number_vue__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_number_vue__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_number_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_number_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_591d2a59_hasScoped_false_preserveWhitespace_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_input_number_vue__ = __webpack_require__(89);
+/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_number_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_number_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_26e61563_hasScoped_false_preserveWhitespace_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_input_number_vue__ = __webpack_require__(92);
 var normalizeComponent = __webpack_require__(0)
 /* script */
+
 
 /* template */
 
 /* template functional */
-  var __vue_template_functional__ = false
+var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -969,7 +1246,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_input_number_vue___default.a,
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_591d2a59_hasScoped_false_preserveWhitespace_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_input_number_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_26e61563_hasScoped_false_preserveWhitespace_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_input_number_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -981,280 +1258,7 @@ var Component = normalizeComponent(
 
 /***/ }),
 
-/***/ 88:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _input = __webpack_require__(11);
-
-var _input2 = _interopRequireDefault(_input);
-
-var _focus = __webpack_require__(38);
-
-var _focus2 = _interopRequireDefault(_focus);
-
-var _repeatClick = __webpack_require__(54);
-
-var _repeatClick2 = _interopRequireDefault(_repeatClick);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-  name: 'ElInputNumber',
-  mixins: [(0, _focus2.default)('input')],
-  inject: {
-    elForm: {
-      default: ''
-    },
-    elFormItem: {
-      default: ''
-    }
-  },
-  directives: {
-    repeatClick: _repeatClick2.default
-  },
-  components: {
-    ElInput: _input2.default
-  },
-  props: {
-    step: {
-      type: Number,
-      default: 1
-    },
-    max: {
-      type: Number,
-      default: Infinity
-    },
-    min: {
-      type: Number,
-      default: -Infinity
-    },
-    value: {},
-    disabled: Boolean,
-    size: String,
-    controls: {
-      type: Boolean,
-      default: true
-    },
-    controlsPosition: {
-      type: String,
-      default: ''
-    },
-    name: String,
-    label: String,
-    precision: {
-      type: Number,
-      validator: function validator(val) {
-        return val >= 0 && val === parseInt(val, 10);
-      }
-    }
-  },
-  data: function data() {
-    return {
-      currentValue: 0
-    };
-  },
-
-  watch: {
-    value: {
-      immediate: true,
-      handler: function handler(value) {
-        var newVal = value === undefined ? value : Number(value);
-        if (newVal !== undefined) {
-          if (isNaN(newVal)) {
-            return;
-          }
-          if (this.precision !== undefined) {
-            newVal = this.toPrecision(newVal, this.precision);
-          }
-        }
-        if (newVal >= this.max) newVal = this.max;
-        if (newVal <= this.min) newVal = this.min;
-        this.currentValue = newVal;
-        this.$emit('input', newVal);
-      }
-    }
-  },
-  computed: {
-    minDisabled: function minDisabled() {
-      return this._decrease(this.value, this.step) < this.min;
-    },
-    maxDisabled: function maxDisabled() {
-      return this._increase(this.value, this.step) > this.max;
-    },
-    numPrecision: function numPrecision() {
-      var value = this.value,
-          step = this.step,
-          getPrecision = this.getPrecision,
-          precision = this.precision;
-
-      var stepPrecision = getPrecision(step);
-      if (precision !== undefined) {
-        if (stepPrecision > precision) {
-          console.warn('[Element Warn][InputNumber]precision should not be less than the decimal places of step');
-        }
-        return precision;
-      } else {
-        return Math.max(getPrecision(value), stepPrecision);
-      }
-    },
-    controlsAtRight: function controlsAtRight() {
-      return this.controlsPosition === 'right';
-    },
-    _elFormItemSize: function _elFormItemSize() {
-      return (this.elFormItem || {}).elFormItemSize;
-    },
-    inputNumberSize: function inputNumberSize() {
-      return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
-    },
-    inputNumberDisabled: function inputNumberDisabled() {
-      return this.disabled || (this.elForm || {}).disabled;
-    },
-    currentInputValue: function currentInputValue() {
-      var currentValue = this.currentValue;
-      if (typeof currentValue === 'number' && this.precision !== undefined) {
-        return currentValue.toFixed(this.precision);
-      } else {
-        return currentValue;
-      }
-    }
-  },
-  methods: {
-    toPrecision: function toPrecision(num, precision) {
-      if (precision === undefined) precision = this.numPrecision;
-      return parseFloat(parseFloat(Number(num).toFixed(precision)));
-    },
-    getPrecision: function getPrecision(value) {
-      if (value === undefined) return 0;
-      var valueString = value.toString();
-      var dotPosition = valueString.indexOf('.');
-      var precision = 0;
-      if (dotPosition !== -1) {
-        precision = valueString.length - dotPosition - 1;
-      }
-      return precision;
-    },
-    _increase: function _increase(val, step) {
-      if (typeof val !== 'number' && val !== undefined) return this.currentValue;
-
-      var precisionFactor = Math.pow(10, this.numPrecision);
-      // Solve the accuracy problem of JS decimal calculation by converting the value to integer.
-      return this.toPrecision((precisionFactor * val + precisionFactor * step) / precisionFactor);
-    },
-    _decrease: function _decrease(val, step) {
-      if (typeof val !== 'number' && val !== undefined) return this.currentValue;
-
-      var precisionFactor = Math.pow(10, this.numPrecision);
-
-      return this.toPrecision((precisionFactor * val - precisionFactor * step) / precisionFactor);
-    },
-    increase: function increase() {
-      if (this.inputNumberDisabled || this.maxDisabled) return;
-      var value = this.value || 0;
-      var newVal = this._increase(value, this.step);
-      this.setCurrentValue(newVal);
-    },
-    decrease: function decrease() {
-      if (this.inputNumberDisabled || this.minDisabled) return;
-      var value = this.value || 0;
-      var newVal = this._decrease(value, this.step);
-      this.setCurrentValue(newVal);
-    },
-    handleBlur: function handleBlur(event) {
-      this.$emit('blur', event);
-      this.$refs.input.setCurrentValue(this.currentInputValue);
-    },
-    handleFocus: function handleFocus(event) {
-      this.$emit('focus', event);
-    },
-    setCurrentValue: function setCurrentValue(newVal) {
-      var oldVal = this.currentValue;
-      if (typeof newVal === 'number' && this.precision !== undefined) {
-        newVal = this.toPrecision(newVal, this.precision);
-      }
-      if (newVal >= this.max) newVal = this.max;
-      if (newVal <= this.min) newVal = this.min;
-      if (oldVal === newVal) {
-        this.$refs.input.setCurrentValue(this.currentInputValue);
-        return;
-      }
-      this.$emit('input', newVal);
-      this.$emit('change', newVal, oldVal);
-      this.currentValue = newVal;
-    },
-    handleInputChange: function handleInputChange(value) {
-      var newVal = value === '' ? undefined : Number(value);
-      if (!isNaN(newVal) || value === '') {
-        this.setCurrentValue(newVal);
-      }
-    }
-  },
-  mounted: function mounted() {
-    var innerInput = this.$refs.input.$refs.input;
-    innerInput.setAttribute('role', 'spinbutton');
-    innerInput.setAttribute('aria-valuemax', this.max);
-    innerInput.setAttribute('aria-valuemin', this.min);
-    innerInput.setAttribute('aria-valuenow', this.currentValue);
-    innerInput.setAttribute('aria-disabled', this.inputNumberDisabled);
-  },
-  updated: function updated() {
-    if (!this.$refs || !this.$refs.input) return;
-    var innerInput = this.$refs.input.$refs.input;
-    innerInput.setAttribute('aria-valuenow', this.currentValue);
-  }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/***/ }),
-
-/***/ 89:
+/***/ 92:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1264,7 +1268,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     { 'is-disabled': _vm.inputNumberDisabled },
     { 'is-without-controls': !_vm.controls },
     { 'is-controls-right': _vm.controlsAtRight }
-  ],on:{"dragstart":function($event){$event.preventDefault();}}},[(_vm.controls)?_c('span',{directives:[{name:"repeat-click",rawName:"v-repeat-click",value:(_vm.decrease),expression:"decrease"}],staticClass:"el-input-number__decrease",class:{'is-disabled': _vm.minDisabled},attrs:{"role":"button"},on:{"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.decrease($event)}}},[_c('i',{class:("el-icon-" + (_vm.controlsAtRight ? 'arrow-down' : 'minus'))})]):_vm._e(),(_vm.controls)?_c('span',{directives:[{name:"repeat-click",rawName:"v-repeat-click",value:(_vm.increase),expression:"increase"}],staticClass:"el-input-number__increase",class:{'is-disabled': _vm.maxDisabled},attrs:{"role":"button"},on:{"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.increase($event)}}},[_c('i',{class:("el-icon-" + (_vm.controlsAtRight ? 'arrow-up' : 'plus'))})]):_vm._e(),_c('el-input',{ref:"input",attrs:{"value":_vm.currentInputValue,"disabled":_vm.inputNumberDisabled,"size":_vm.inputNumberSize,"max":_vm.max,"min":_vm.min,"name":_vm.name,"label":_vm.label},on:{"blur":_vm.handleBlur,"focus":_vm.handleFocus,"change":_vm.handleInputChange},nativeOn:{"keydown":[function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"up",38,$event.key)){ return null; }$event.preventDefault();_vm.increase($event)},function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"down",40,$event.key)){ return null; }$event.preventDefault();_vm.decrease($event)}]}})],1)}
+  ],on:{"dragstart":function($event){$event.preventDefault();}}},[(_vm.controls)?_c('span',{directives:[{name:"repeat-click",rawName:"v-repeat-click",value:(_vm.decrease),expression:"decrease"}],staticClass:"el-input-number__decrease",class:{'is-disabled': _vm.minDisabled},attrs:{"role":"button"},on:{"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.decrease($event)}}},[_c('i',{class:("el-icon-" + (_vm.controlsAtRight ? 'arrow-down' : 'minus'))})]):_vm._e(),(_vm.controls)?_c('span',{directives:[{name:"repeat-click",rawName:"v-repeat-click",value:(_vm.increase),expression:"increase"}],staticClass:"el-input-number__increase",class:{'is-disabled': _vm.maxDisabled},attrs:{"role":"button"},on:{"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.increase($event)}}},[_c('i',{class:("el-icon-" + (_vm.controlsAtRight ? 'arrow-up' : 'plus'))})]):_vm._e(),_c('el-input',{ref:"input",attrs:{"value":_vm.currentInputValue,"disabled":_vm.inputNumberDisabled,"size":_vm.inputNumberSize,"max":_vm.max,"min":_vm.min,"name":_vm.name,"label":_vm.label},on:{"blur":_vm.handleBlur,"focus":_vm.handleFocus,"change":_vm.handleInputChange},nativeOn:{"keydown":[function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"up",38,$event.key,["Up","ArrowUp"])){ return null; }$event.preventDefault();return _vm.increase($event)},function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"down",40,$event.key,["Down","ArrowDown"])){ return null; }$event.preventDefault();return _vm.decrease($event)}]}})],1)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
