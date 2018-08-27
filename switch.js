@@ -246,7 +246,7 @@ var _focus = __webpack_require__(38);
 
 var _focus2 = _interopRequireDefault(_focus);
 
-var _migrating = __webpack_require__(4);
+var _migrating = __webpack_require__(5);
 
 var _migrating2 = _interopRequireDefault(_migrating);
 
@@ -450,7 +450,7 @@ exports.default = function (ref) {
 
 /***/ }),
 
-/***/ 4:
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
