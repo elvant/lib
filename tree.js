@@ -2015,7 +2015,7 @@ var Node = function () {
     var targetNode = null;
 
     for (var i = 0; i < this.childNodes.length; i++) {
-      if (this.childNodes[i] === data) {
+      if (this.childNodes[i].data === data) {
         targetNode = this.childNodes[i];
         break;
       }
